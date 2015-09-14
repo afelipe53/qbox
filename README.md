@@ -1,7 +1,7 @@
 #INTRODUÇÃO
 --------------------------------------------------------------------------
 
-QBox é uma ferramenta para armazenamento de arquivos, semelhante a sistemas como Dropbox ou Google Drive.
+QBox é uma ferramenta para armazenamento de arquivos na web.
 Desenvolvido usando Java/Spring MVC e IoC container/Hibernate/MySQL no backend e JSP/Semantic-UI no frontend
 
 
@@ -14,6 +14,15 @@ Desenvolvido usando Java/Spring MVC e IoC container/Hibernate/MySQL no backend e
 4. Acessar "host do servidor + porta"/app/home;
 5. Ao acessar pela primeira vez ele vai pedir para indicar qual a pasta no servidor onde ficarão os arquivos;
 6. Criar um novo usuário e começar a usar :).
+
+#EM BREVE
+--------------------------------------------------------------------------
+1. Funcionalidade "Renomear Pasta";
+2. Links (gera link da pasta ou do arquivo para compartilhar publicamente);
+3. Pesquisar (pesquisa em pastas e arquivos);
+4. Perfil (alterar os dados do usuário);
+5. Gravar log de ações do usuário no sistema;
+6. Download de pastas (em formato zip).
 
 #IMAGENS
 --------------------------------------------------------------------------

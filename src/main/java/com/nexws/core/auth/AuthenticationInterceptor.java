@@ -44,9 +44,6 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 			return true;
 		}
 
-		this.qBoxAuthenticationContext.setUser(
-				this.userRepository.retrieveByProperty("email", "afelipejoriatti@gmail.com").get(0));
-
 		if (this.qBoxAuthenticationContext.isAuthenticated()) {
 			return true;
 		}

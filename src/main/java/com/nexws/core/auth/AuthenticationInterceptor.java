@@ -10,14 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.nexws.core.repository.QBoxSetupRepository;
-import com.nexws.core.repository.UserRepository;
 
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
 	@Autowired
 	private QBoxAuthenticationContext qBoxAuthenticationContext;
-	@Autowired
-	private UserRepository userRepository;
 	@Autowired
 	private QBoxSetupRepository qBoxSetupRepository;
 
@@ -28,15 +25,18 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
 		request.setCharacterEncoding("UTF-8");
 
-		if (this.qBoxAuthenticationContext.getUser() == null) {
-			if (this.qBoxSetupRepository.retrieve().size() == 0) {
+		if (request.getRequestURI().contains("resources")) {
+			return true;
+		}
 
-				if (request.getRequestURI().contains("setup")) {
-					return true;
-				} else {
-					response.sendRedirect(request.getContextPath() + "/setup");
-					return false;
-				}
+		if (this.qBoxAuthenticationContext.getUser() == null &&
+				this.qBoxSetupRepository.retrieve().size() == 0) {
+
+			if (request.getRequestURI().contains("setup")) {
+				return true;
+			} else {
+				response.sendRedirect(request.getContextPath() + "/setup");
+				return false;
 			}
 		}
 
@@ -57,7 +57,6 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
 		listFreeUrls.add("login");
 		listFreeUrls.add("do-login");
-		listFreeUrls.add("resources");
 		listFreeUrls.add("user-register");
 		listFreeUrls.add("do-register");
 		listFreeUrls.add("setup");

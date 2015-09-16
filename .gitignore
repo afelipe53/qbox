@@ -4,3 +4,4 @@
 .project
 .tern-project
 mvn
+/src/main/resources/rebel.xml

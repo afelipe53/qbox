@@ -17,12 +17,11 @@ Desenvolvido usando Java/Spring MVC e IoC container/Hibernate/MySQL no backend e
 
 #EM BREVE
 --------------------------------------------------------------------------
-1. Funcionalidade "Renomear Pasta";
-2. Links (gera link da pasta ou do arquivo para compartilhar publicamente);
-3. Pesquisar (pesquisa em pastas e arquivos);
-4. Perfil (alterar os dados do usuário);
-5. Gravar log de ações do usuário no sistema;
-6. Download de pastas (em formato zip).
+1. Links (gera link da pasta ou do arquivo para compartilhar publicamente);
+2. Pesquisar (pesquisa em pastas e arquivos);
+3. Perfil (alterar os dados do usuário);
+4. Gravar log de ações do usuário no sistema;
+5. Download de pastas (em formato zip).
 
 #IMAGENS
 --------------------------------------------------------------------------

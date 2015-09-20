@@ -25,7 +25,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
 		request.setCharacterEncoding("UTF-8");
 
-		if (request.getRequestURI().contains("resources")) {
+		if (request.getRequestURI().contains("resources") || request.getRequestURI().contains("share")) {
 			return true;
 		}
 

@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,7 +15,6 @@ import com.nexws.core.persistence.AbstractModel;
 
 @Entity
 @Table(name = "qb_file")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class QBoxFile extends AbstractModel {
 
 	private static final long serialVersionUID = 1L;

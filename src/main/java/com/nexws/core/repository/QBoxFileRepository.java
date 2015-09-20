@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.nexws.core.auth.QBoxAuthenticationContext;
 import com.nexws.core.model.QBoxFile;
+import com.nexws.core.model.QBoxFileLink;
 import com.nexws.core.persistence.AbstractRepository;
 import com.nexws.core.persistence.RepositoryException;
 
@@ -24,6 +26,8 @@ public class QBoxFileRepository extends AbstractRepository<QBoxFile> {
 
 	@Autowired
 	private QBoxAuthenticationContext qBoxAuthenticationContext;
+	@Autowired
+	private QBoxFileLinkRepository qBoxFileLinkRepository;
 
 	@Override
 	public QBoxFile createOrUpdate(QBoxFile qBoxFile) throws RepositoryException {
@@ -38,11 +42,16 @@ public class QBoxFileRepository extends AbstractRepository<QBoxFile> {
 		return qBoxFile;
 	}
 
-	public List<QBoxFile> retrieveByParentId(Long parentId) {
+	public List<QBoxFile> retrieveByParentId(Long parentId, boolean validPermission) {
 
 		QBoxFile parent = this.retrieveById(parentId);
 
-		if (parentId != null && !parent.getOwner().equals(this.qBoxAuthenticationContext.getUser())) {
+		if (validPermission && parentId != null &&
+				!parent.getOwner().equals(this.qBoxAuthenticationContext.getUser())) {
+			return new ArrayList<QBoxFile>();
+		}
+
+		if (!validPermission && !this.canShareFile(parent)) {
 			return new ArrayList<QBoxFile>();
 		}
 
@@ -67,7 +76,11 @@ public class QBoxFileRepository extends AbstractRepository<QBoxFile> {
 			query.setParameter("parentId", parentId);
 		}
 
-		query.setParameter("userId", this.qBoxAuthenticationContext.getUser().getId());
+		if (!validPermission) {
+			query.setParameter("userId", parent.getOwner().getId());
+		} else {
+			query.setParameter("userId", this.qBoxAuthenticationContext.getUser().getId());
+		}
 
 		List<QBoxFile> listFiles = query.getResultList();
 
@@ -174,9 +187,11 @@ public class QBoxFileRepository extends AbstractRepository<QBoxFile> {
 			throw new RepositoryException("Usuário não possui permissão para deletar o arquivo");
 		}
 
+		this.qBoxFileLinkRepository.deleteByFile(file);
+
 		if (file.isFolder()) {
 
-			List<QBoxFile> childrens = this.retrieveByParentId(file.getId());
+			List<QBoxFile> childrens = this.retrieveByParentId(file.getId(), true);
 
 			for (QBoxFile item : childrens) {
 				this.delete(item);
@@ -193,11 +208,11 @@ public class QBoxFileRepository extends AbstractRepository<QBoxFile> {
 
 	}
 
-	public byte[] download(Long id) throws RepositoryException {
+	public byte[] download(Long id, boolean validPermission) throws RepositoryException {
 
 		QBoxFile file = this.retrieveById(id);
 
-		if (!file.getOwner().equals(this.qBoxAuthenticationContext.getUser())) {
+		if (validPermission && !file.getOwner().equals(this.qBoxAuthenticationContext.getUser())) {
 			throw new RepositoryException("Usuário não possui permissão para realizar essa operação");
 		}
 
@@ -239,5 +254,90 @@ public class QBoxFileRepository extends AbstractRepository<QBoxFile> {
 
 		return folder;
 
+	}
+
+	public void editFolderName(Long id, String name) throws RepositoryException {
+
+		QBoxFile folder = this.retrieveById(id);
+
+		if (folder != null && !folder.getOwner().equals(this.qBoxAuthenticationContext.getUser())) {
+			throw new RepositoryException("Usuário não possui permissão para executar essa operação");
+		}
+
+		if (!folder.isFolder()) {
+			throw new RepositoryException("Arquivo não é uma pasta");
+		}
+
+		if (name != null && !name.isEmpty()) {
+			folder.setFileName(name);
+			this.createOrUpdate(folder);
+		}
+
+	}
+
+	public List<QBoxFile> getBreadcrumbList(QBoxFile file) {
+
+		List<QBoxFile> breadCumb = new ArrayList<QBoxFile>();
+
+		if (file.getId() == null) {
+			QBoxFile parent = new QBoxFile();
+			parent.setFileName("QBox");
+			breadCumb.add(parent);
+		}
+
+		while (file != null && file.getId() != null) {
+
+			breadCumb.add(file);
+			if (file.getParent() != null) {
+				file = this.retrieveById(file.getParent().getId());
+			} else {
+				file = null;
+				QBoxFile parent = new QBoxFile();
+				parent.setFileName("QBox");
+				breadCumb.add(parent);
+			}
+		}
+
+		Collections.reverse(breadCumb);
+		return breadCumb;
+	}
+
+	public List<QBoxFile> getBreadcrumbListForLink(QBoxFile file, QBoxFileLink link) {
+
+		List<QBoxFile> breadCumb = new ArrayList<QBoxFile>();
+
+		while (file != null) {
+
+			breadCumb.add(file);
+
+			if (file.getId() == null || file.equals(link.getFile())) {
+				break;
+			}
+
+			if (file.getParent() != null) {
+				file = this.retrieveById(file.getParent().getId());
+			} else {
+				file = null;
+				QBoxFile parent = new QBoxFile();
+				parent.setFileName("QBox");
+				file = parent;
+			}
+		}
+
+		Collections.reverse(breadCumb);
+		return breadCumb;
+	}
+
+	private boolean canShareFile(QBoxFile file) {
+
+		List<QBoxFileLink> links = this.qBoxFileLinkRepository.retrieveByProperty("file", file);
+
+		if (links != null && links.size() > 0) {
+			return true;
+		} else if (file.getParent() != null) {
+			return this.canShareFile(file.getParent());
+		}
+
+		return false;
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -46,7 +47,7 @@ public class QBoxFileController {
 	}
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-	public String delete(HttpServletRequest request, Model model, @PathVariable String id) {
+	public String delete(@PathVariable String id) {
 		try {
 			QBoxFile file = this.qBoxFileRepository.retrieveById(new Long(id));
 			this.qBoxFileRepository.delete(file);
@@ -59,11 +60,11 @@ public class QBoxFileController {
 	}
 
 	@RequestMapping(value="/file/{id}", method = RequestMethod.GET)
-	@ResponseBody public byte[] download(@PathVariable String id, HttpServletRequest request)
+	@ResponseBody public byte[] download(@PathVariable Long id)
 			throws IOException {
 
 		try {
-			return this.qBoxFileRepository.download(new Long(id));
+			return this.qBoxFileRepository.download(id, true);
 		} catch (Exception e) {
 			LOGGER.debug(e.getMessage());
 			return new byte[0];
@@ -71,12 +72,25 @@ public class QBoxFileController {
 	}
 
 	@RequestMapping(value = "/create-folder/{idParentFolder}/{nameFolderToCreate}", method = RequestMethod.POST)
-	public String createFolder(HttpServletRequest request, Model model,
-			@PathVariable String idParentFolder, @PathVariable String nameFolderToCreate) {
+	public String createFolder(@PathVariable String idParentFolder,
+			@PathVariable String nameFolderToCreate) {
 
 		try {
 			Long parentId = idParentFolder.equals("-1") ? null : new Long(idParentFolder);
 			this.qBoxFileRepository.createFolder(parentId, nameFolderToCreate);
+		} catch (Exception e) {
+			LOGGER.debug(e.getMessage());
+			return "";
+		}
+
+		return "app/home";
+	}
+
+	@RequestMapping(value = "/editFolderName/{id}", method = RequestMethod.POST)
+	public String editFolderName(@PathVariable String id, @RequestBody String name) {
+
+		try {
+			this.qBoxFileRepository.editFolderName(new Long(id), name);
 		} catch (Exception e) {
 			LOGGER.debug(e.getMessage());
 			return "";

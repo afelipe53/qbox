@@ -92,7 +92,7 @@
 			      		  window.location.reload(true);
 			          }
 			      });
-			   }
+		   }
 
 		   function createFolder() {
 
@@ -123,6 +123,75 @@
 			     }
 			   }).modal('show');
 
+		   }
+
+		   function confirmEditFolder(idFolder, name) {
+
+			   $('#folder-name-edit-input').val(name);
+
+			   $('#edit-name-folder-modal')
+			   .modal({
+			     closable  : false,
+			     onDeny    : function() {
+					return true;
+			     },
+			     onApprove : function() {
+			    	 editFolderName(idFolder, $('#folder-name-edit-input').val());
+			     }
+			   })
+			   .modal('show');
+
+		   }
+
+		   function editFolderName(idFolder, nameFolder) {
+
+			   $.ajax({
+			      	  url: '${root}/app/editFolderName/' + idFolder,
+		              type: 'POST',
+			      	  data : nameFolder, 
+			      	  processData: false,
+			      	  contentType: false,
+			      	  beforeSend: function() {},
+			      	  success: function() {
+			      		  window.location.reload(true);
+			          }
+			      });
+		   }
+
+		   function confirmGenerateLink(fileId) {
+
+			   $('#confirm-generate-file-link')
+			   .modal({
+			     closable  : false,
+			     onDeny    : function() {
+					return true;
+			     },
+			     onApprove : function() {
+				     generateLinkForFile(fileId);
+			     }
+			   })
+			   .modal('show');
+		   }
+
+		   function generateLinkForFile(fileId) {
+
+			   $.ajax({
+			      	  url: '${root}/app/generate-link/' + fileId,
+		              type: 'POST',
+			      	  data : null, 
+			      	  processData: false,
+			      	  contentType: false,
+			      	  beforeSend: function() {},
+			      	  success: function(data) {
+			      		  $('#div-message-create-link').show();
+			      		  $("#p-link-generated").empty();
+			      		  $("#p-link-generated").append(data);
+			          }
+			      });
+		   }
+
+		   function closeMessageCreateLink() {
+			   $('#div-message-create-link').hide();
 		   }
 
 		   var $loading = 
@@ -165,7 +234,15 @@
 					<div id="loadingDiv" style="display: none; margin-top: 7px !important;" class="ui active inline loader center aligned"></div>
 					<input class="green ui tiny button" type="button" id="create-folder-button" value="Nova pasta" onclick="createFolder();"/>
 				</form>
-				
+
+				<div class="ui positive message" id="div-message-create-link" style="display: none;">
+					<i class="close icon" id="button-close-div-message-create-link" onclick="closeMessageCreateLink();"></i>
+				  	<div class="header">
+				    	Novo link criado
+				  	</div>
+				  	<a><p id="p-link-generated"></p></a>
+				</div>
+
 				<div class="ui breadcrumb">
 				
 					<c:forEach items="${breadcrumbList}" var="qBoxFile">
@@ -208,14 +285,15 @@
 
 						      	<c:choose>
 								    <c:when test="${qBoxFile.folder}">
-								        <i class="remove icon" onclick="confirmDeleteFolder(${qBoxFile.id});" style="cursor: pointer;"></i>
+  										<i class="remove icon" onclick="confirmDeleteFolder(${qBoxFile.id});" style="cursor: pointer;"></i>
+  										<i class="edit icon" onclick="confirmEditFolder(${qBoxFile.id}, '${qBoxFile.fileName}');" style="cursor: pointer;"></i>
 								    </c:when>    
 								    <c:otherwise>
 								        <i class="remove icon" onclick="confirmDeleteFile(${qBoxFile.id});" style="cursor: pointer;"></i>
 								    </c:otherwise>
 								</c:choose>
 
-						        <i class="linkify icon"></i> 
+						        <i class="linkify icon" style="cursor: pointer;" onclick="confirmGenerateLink(${qBoxFile.id});"></i>
 						      </td>
 						    </tr>
 						</c:forEach>
@@ -264,6 +342,35 @@
   		<div class="actions">
     		<div class="ui button cancel">Cancelar</div>
     		<div class="ui primary button ok">Criar</div>
+  		</div>
+	</div>
+
+	<div class="ui tiny modal" id="edit-name-folder-modal">
+  		<div class="header">
+    		Alterar Nome da pasta
+  		</div>
+  		<div class="content">
+    		<p>Informe um novo nome para a pasta: </p>
+    		<div class="ui input focus fluid tiny">
+				<input type="text" id="folder-name-edit-input">
+			</div>
+  		</div>
+  		<div class="actions">
+    		<div class="ui button cancel">Cancelar</div>
+    		<div class="ui primary button ok">Confirmar</div>
+  		</div>
+	</div>
+
+	<div class="ui basic small modal" id="confirm-generate-file-link">
+  		<div class="header">
+    		Gerar Link de compartilhamento
+  		</div>
+  		<div class="content">
+    		<p>Tem certeza que deseja gerar o link para este arquivo/pasta?</p>
+  		</div>
+  		<div class="actions">
+    		<div class="ui button cancel">Cancelar</div>
+    		<div class="ui inverted red basic button ok">Confirmar</div>
   		</div>
 	</div>
 

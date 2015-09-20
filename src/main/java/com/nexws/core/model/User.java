@@ -6,8 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -21,7 +19,6 @@ import com.nexws.core.repository.UserRepository;
 
 @Entity
 @Table(name = "qb_user")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User extends AbstractModel {
 
 	private static final long serialVersionUID = 1L;

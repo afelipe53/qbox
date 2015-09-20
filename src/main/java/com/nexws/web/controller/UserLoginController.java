@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,13 +35,13 @@ public class UserLoginController {
 	}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(HttpSession session) {
+	public String logout() {
 		this.qBoxAuthenticationContext.invalidateSession();
 		return this.login();
 	}
 
 	@RequestMapping(value = "/do-login", method = RequestMethod.POST)
-	public String doLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model) {
+	public String doLogin(HttpServletRequest request, HttpServletResponse response, Model model) {
 
 		User user = new User();
 		user.setEmail(request.getParameter("email"));

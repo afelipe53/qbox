@@ -28,8 +28,7 @@ public class UserRegisterController {
 	private UserRepository userRepository;
 
 	@RequestMapping(value = "/user-register", method = RequestMethod.GET)
-	public String userRegisterForm(
-			HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model) {
+	public String userRegisterForm(HttpSession session, Model model) {
 
 		model.addAttribute("user", session.getAttribute("user-form") != null ?
 				((User) session.getAttribute("user-form")) : new User());

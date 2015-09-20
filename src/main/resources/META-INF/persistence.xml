@@ -12,10 +12,11 @@
 		<class>com.nexws.core.model.User</class>
 		<class>com.nexws.core.model.QBoxFile</class>
 		<class>com.nexws.core.model.QBoxSetup</class>
+		<class>com.nexws.core.model.QBoxFileLink</class>
 
 		<properties>
-			<property name="hibernate.show_sql" value="true"/>
-			<property name="hibernate.format_sql" value="true"/>
+			<property name="hibernate.show_sql" value="false"/>
+			<property name="hibernate.format_sql" value="false"/>
 			<property name="hibernate.hbm2ddl.auto" value="update"/>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 

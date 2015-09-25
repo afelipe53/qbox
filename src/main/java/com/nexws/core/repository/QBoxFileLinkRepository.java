@@ -22,7 +22,7 @@ public class QBoxFileLinkRepository extends AbstractRepository<QBoxFileLink> {
 	public QBoxFileLink createOrUpdate(QBoxFileLink link) throws RepositoryException {
 
 		if (!link.getFile().getOwner().equals(this.qBoxAuthenticationContext.getUser())) {
-			throw new RepositoryException("Usu·rio n„o possui permiss„o para executar aÁ„o");
+			throw new RepositoryException("Usu√°rio n√£o possui permiss√£o para executar a√ß√£o");
 		}
 
 		if (link.getId() == null) {

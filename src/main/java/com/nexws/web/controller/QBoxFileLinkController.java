@@ -34,7 +34,7 @@ public class QBoxFileLinkController {
 		try {
 			QBoxFileLink link = this.qBoxFileLinkRepository.retrieveById(idLink);
 			if (link == null) {
-				throw new RepositoryException("Arquivo n„o encontrado");
+				throw new RepositoryException("Arquivo n√£o encontrado");
 			}
 
 			if (link.getFile().isFolder()) {
@@ -74,7 +74,7 @@ public class QBoxFileLinkController {
 			QBoxFileLink link = this.qBoxFileLinkRepository.retrieveById(idLink);
 
 			if (link == null) {
-				throw new RepositoryException("Arquivo n„o encontrado");
+				throw new RepositoryException("Arquivo n√£o encontrado");
 			}
 
 			model.addAttribute("fileList",

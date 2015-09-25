@@ -57,7 +57,7 @@ public class UserLoginController {
 				response.sendRedirect(request.getContextPath() + "/app/home");
 			} catch (IOException e) {
 				LOGGER.error(e.getMessage(), e);
-				model.addAttribute("loginMessage", "Erro ao redirecionar p·gina");
+				model.addAttribute("loginMessage", "Erro ao redirecionar p√°gina");
 			}
 
 			return null;

@@ -29,11 +29,11 @@ public class UserRepository extends AbstractRepository<User> {
 	public User createOrUpdate(User user) throws RepositoryException {
 
 		if (this.isStringNullOrBlank(user.getEmail())) {
-			throw new RepositoryException("E-mail È obrigatÛrio");
+			throw new RepositoryException("E-mail √© obrigat√≥rio");
 		}
 
 		if (this.isStringNullOrBlank(user.getName())) {
-			throw new RepositoryException("O nome È obrigatÛrio");
+			throw new RepositoryException("O nome √© obrigat√≥rio");
 		}
 
 		if (user.getId() == null) {
@@ -43,21 +43,21 @@ public class UserRepository extends AbstractRepository<User> {
 			}
 
 			if (!this.validEmail(user.getEmail())) {
-				throw new RepositoryException("E-mail inv·lido");
+				throw new RepositoryException("E-mail inv√°lido");
 			}
 
 			if (this.isStringNullOrBlank(user.getPassword())) {
-				throw new RepositoryException("A senha È obrigatÛria");
+				throw new RepositoryException("A senha √© obrigat√≥ria");
 			}
 
 			if (!user.isAgreeTermsQbox()) {
-				throw new RepositoryException("Por favor confirme que vocÍ est· de acordo com os termos de serviÁo.");
+				throw new RepositoryException("Por favor confirme que voc√™ est√° de acordo com os termos de servi√ßo.");
 			}
 
 			List<User> listUser = this.retrieveByProperty("email", user.getEmail());
 
 			if (listUser.size() > 0) {
-				throw new RepositoryException("Usu·rio j· existe");
+				throw new RepositoryException("Usu√°rio j√° existe");
 			}
 
 			user.setPassword(UserRepository.encrypt(user.getPassword()));
@@ -74,10 +74,10 @@ public class UserRepository extends AbstractRepository<User> {
 
 		List<User> listUser = this.retrieveByProperty("email", user.getEmail());
 		if (listUser.size() == 0) {
-			throw new RepositoryException("Usu·rio n„o encontrado");
+			throw new RepositoryException("Usu√°rio n√£o encontrado");
 		} else {
 			if (!listUser.get(0).getPassword().equals(user.getPassword())) {
-				throw new RepositoryException("Senha inv·lida");
+				throw new RepositoryException("Senha inv√°lida");
 			}
 
 			User userLogged = listUser.get(0);

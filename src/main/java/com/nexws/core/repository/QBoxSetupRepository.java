@@ -15,7 +15,7 @@ public class QBoxSetupRepository extends AbstractRepository<QBoxSetup>  {
 	public QBoxSetup createOrUpdate(QBoxSetup entity) throws RepositoryException {
 
 		if (this.retrieve().size() > 0) {
-			throw new RepositoryException("Este ambiente j· est· configurado");
+			throw new RepositoryException("Este ambiente j√° est√° configurado");
 		}
 
 		if (this.isStringNullOrBlank(entity.getRootVolumeFolder())) {
@@ -25,11 +25,11 @@ public class QBoxSetupRepository extends AbstractRepository<QBoxSetup>  {
 		File file = new File(entity.getRootVolumeFolder());
 
 		if (!file.isDirectory()) {
-			throw new RepositoryException("O caminho informado n„o corresponde a uma pasta");
+			throw new RepositoryException("O caminho informado n√£o corresponde a uma pasta");
 		}
 
 		if (!file.exists()) {
-			throw new RepositoryException("A pasta informada n„o existe");
+			throw new RepositoryException("A pasta informada n√£o existe");
 		}
 
 		entity.setRootVolumeFolder(entity.getRootVolumeFolder().replace('\\', '/'));

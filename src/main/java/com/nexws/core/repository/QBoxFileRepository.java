@@ -142,7 +142,7 @@ public class QBoxFileRepository extends AbstractRepository<QBoxFile> {
 		try {
 
 			if (parent != null && !parent.getOwner().equals(this.qBoxAuthenticationContext.getUser())) {
-				throw new RepositoryException("Usu·rio n„o possui permiss„o para efetuar essa operaÁ„o");
+				throw new RepositoryException("Usu√°rio n√£o possui permiss√£o para efetuar essa opera√ß√£o");
 			}
 
 			if (!multipartFile.isEmpty()) {
@@ -184,7 +184,7 @@ public class QBoxFileRepository extends AbstractRepository<QBoxFile> {
 	public void delete(QBoxFile file) throws RepositoryException {
 
 		if (!file.getOwner().equals(this.qBoxAuthenticationContext.getUser())) {
-			throw new RepositoryException("Usu·rio n„o possui permiss„o para deletar o arquivo");
+			throw new RepositoryException("Usu√°rio n√£o possui permiss√£o para deletar o arquivo");
 		}
 
 		this.qBoxFileLinkRepository.deleteByFile(file);
@@ -213,7 +213,7 @@ public class QBoxFileRepository extends AbstractRepository<QBoxFile> {
 		QBoxFile file = this.retrieveById(id);
 
 		if (validPermission && !file.getOwner().equals(this.qBoxAuthenticationContext.getUser())) {
-			throw new RepositoryException("Usu·rio n„o possui permiss„o para realizar essa operaÁ„o");
+			throw new RepositoryException("Usu√°rio n√£o possui permiss√£o para realizar essa opera√ß√£o");
 		}
 
 		File fileDowload = new File(file.getOwner().getUserFolder() + "/" + file.getFileRealName());
@@ -233,13 +233,13 @@ public class QBoxFileRepository extends AbstractRepository<QBoxFile> {
 	public QBoxFile createFolder(Long parentId, String folderName) throws RepositoryException {
 
 		if (folderName == null) {
-			throw new RepositoryException("Nome da pasta n„o pode estar vazio");
+			throw new RepositoryException("Nome da pasta n√£o pode estar vazio");
 		}
 
 		QBoxFile parent = this.retrieveById(parentId);
 
 		if (parent != null && !parent.getOwner().equals(this.qBoxAuthenticationContext.getUser())) {
-			throw new RepositoryException("Usu·rio n„o possui permiss„o para executar essa operaÁ„o");
+			throw new RepositoryException("Usu√°rio n√£o possui permiss√£o para executar essa opera√ß√£o");
 		}
 
 		QBoxFile folder = new QBoxFile();
@@ -261,11 +261,11 @@ public class QBoxFileRepository extends AbstractRepository<QBoxFile> {
 		QBoxFile folder = this.retrieveById(id);
 
 		if (folder != null && !folder.getOwner().equals(this.qBoxAuthenticationContext.getUser())) {
-			throw new RepositoryException("Usu·rio n„o possui permiss„o para executar essa operaÁ„o");
+			throw new RepositoryException("Usu√°rio n√£o possui permiss√£o para executar essa opera√ß√£o");
 		}
 
 		if (!folder.isFolder()) {
-			throw new RepositoryException("Arquivo n„o È uma pasta");
+			throw new RepositoryException("Arquivo n√£o √© uma pasta");
 		}
 
 		if (name != null && !name.isEmpty()) {

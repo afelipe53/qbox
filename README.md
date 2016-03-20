@@ -15,7 +15,7 @@ Desenvolvido usando Java/Spring MVC e IoC container/Hibernate/MySQL no backend e
 5. Ao acessar pela primeira vez ele vai pedir para indicar qual a pasta no servidor onde ficarão os arquivos;
 6. Criar um novo usuário e começar a usar :).
 
-#EM BREVE
+#TO-DO
 --------------------------------------------------------------------------
 1. Links (gera link da pasta ou do arquivo para compartilhar publicamente);
 2. Pesquisar (pesquisa em pastas e arquivos);
